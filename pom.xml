@@ -8,6 +8,11 @@
     <name>WebORMProject</name>
 
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        
         <jdk.version>1.8</jdk.version>
         <junit-version>3.8.1</junit-version>
         <spring-version>4.3.1.RELEASE</spring-version>
@@ -15,7 +20,6 @@
         <hibernate-version>5.2.1.Final</hibernate-version>
         <servlet-api-version>4.0.0-b01</servlet-api-version>
         <vaadin-version>7.6.8</vaadin-version>
-        <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
     <dependencies>
@@ -127,12 +131,9 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-war-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <failOnMissingWebXml>false</failOnMissingWebXml>
-                </configuration>
+                <groupId>org.mortbay.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>8.1.16.v20140903</version>
             </plugin>
         </plugins>
     </build>
