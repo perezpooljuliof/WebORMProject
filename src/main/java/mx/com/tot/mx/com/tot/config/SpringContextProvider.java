@@ -11,6 +11,10 @@ import org.springframework.stereotype.Component;
 public class SpringContextProvider implements ApplicationContextAware {
     private static ApplicationContext applicationContext;
 
+    public SpringContextProvider() {
+        System.out.println("SpringContextProvider()>>>>>");
+    }
+
     public void setApplicationContext(ApplicationContext context) {
         applicationContext = context;
     }

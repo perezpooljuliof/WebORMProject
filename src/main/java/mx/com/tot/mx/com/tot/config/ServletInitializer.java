@@ -19,6 +19,6 @@ public class ServletInitializer extends AbstractAnnotationConfigDispatcherServle
 
     @Override
     protected String[] getServletMappings() {
-        return new String[]{"/Sincopro", "/Sincopro/**"};
+        return new String[]{""};
     }
 }

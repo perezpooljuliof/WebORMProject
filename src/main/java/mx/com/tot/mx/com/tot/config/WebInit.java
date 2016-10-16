@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
  */
 @EnableWebMvc
 @Configuration
-@ComponentScan(basePackageClasses = { SpringContextProvider.class })
+@ComponentScan(basePackageClasses = { SpringContextProvider.class, HibernateConfig.class })
 public class WebInit {
 
     public WebInit() {

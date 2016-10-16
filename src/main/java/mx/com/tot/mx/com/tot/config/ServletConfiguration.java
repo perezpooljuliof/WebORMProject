@@ -33,3 +33,4 @@ public class ServletConfiguration extends VaadinServlet implements SessionInitLi
         System.out.println("sessionInit()>>>>>");
     }
 }
+
