@@ -1,4 +1,4 @@
-package mx.com.tot.mx.com.tot.config;
+package mx.com.tot.config;
 
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
@@ -8,18 +8,23 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.io.IOException;
 import java.util.Properties;
 
 /**
  * Created by elver on 1/08/16.
  */
+
 @Configuration
+@ComponentScan({"mx.com.tot.dao", "mx.com.tot.bo"})
 @EnableTransactionManagement
-@ComponentScan(basePackages = {"mx.com.tot.dao", "mx.com.tot.bo"})
 @PropertySource(value = {"classpath:hibernate.properties"})
 public class HibernateConfig {
 
@@ -38,8 +43,6 @@ public class HibernateConfig {
         dataSource.setPassword(environment.getProperty("jdbc.password"));
         dataSource.setUrl(environment.getProperty("jdbc.url"));
 
-        System.out.println("datasource:" + dataSource.getUrl());
-
         return dataSource;
     }
 
@@ -51,7 +54,9 @@ public class HibernateConfig {
     }
 
     @Bean(name = "sessionFactory")
-    public LocalSessionFactoryBean getSessionFactory() {
+    public LocalSessionFactoryBean getSessionFactory() throws IOException {
+
+
         LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
         sessionFactory.setDataSource(getDataSource());
         sessionFactory.setPackagesToScan(new String[] {"mx.com.tot.dto"});
@@ -62,10 +67,22 @@ public class HibernateConfig {
 
     @Bean
     @Autowired
-    public HibernateTransactionManager getTransactionManager(SessionFactory session) {
+    public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
         HibernateTransactionManager txMannager = new HibernateTransactionManager();
-        txMannager.setSessionFactory(session);
+        txMannager.setSessionFactory(sessionFactory);
 
         return txMannager;
+    }
+
+    /*
+    @Bean
+    public HibernateExceptionTranslator hibernateExceptionTranslator(){
+        return new HibernateExceptionTranslator();
+    }
+    */
+
+    @Bean
+    public PersistenceExceptionTranslationPostProcessor getExceptionTranslator() {
+        return new PersistenceExceptionTranslationPostProcessor();
     }
 }

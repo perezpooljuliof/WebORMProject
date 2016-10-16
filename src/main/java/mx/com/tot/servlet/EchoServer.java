@@ -1,4 +1,4 @@
-package mx.com.tot.mx.com.tot.servlet;
+package mx.com.tot.servlet;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnMessage;

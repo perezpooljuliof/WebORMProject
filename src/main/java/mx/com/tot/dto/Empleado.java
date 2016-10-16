@@ -1,4 +1,4 @@
-package mx.com.tot.mx.com.tot.dto;
+package mx.com.tot.dto;
 
 import javax.persistence.*;
 

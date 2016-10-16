@@ -1,4 +1,4 @@
-package mx.com.tot.mx.com.tot.config;
+package mx.com.tot.config;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 

@@ -1,8 +1,8 @@
-package mx.com.tot.mx.com.tot.config;
+package mx.com.tot.config;
 
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.server.*;
-import mx.com.tot.mx.com.tot.web.MainUI;
+import mx.com.tot.web.MainUI;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
