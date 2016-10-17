@@ -1,5 +1,7 @@
 package mx.com.tot.config;
 
+import java.util.Properties;
+import javax.sql.DataSource;
 import org.apache.commons.dbcp2.BasicDataSource;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,80 +11,77 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
-import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
-import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
-import org.springframework.orm.hibernate4.LocalSessionFactoryBuilder;
+import org.springframework.orm.hibernate4.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import java.io.IOException;
-import java.util.Properties;
-
 /**
- * Created by elver on 1/08/16.
+ *
+ * @author JULIO.PEREZ
  */
 
 @Configuration
-@ComponentScan({"mx.com.tot.dao", "mx.com.tot.bo"})
+@ComponentScan({"mx.com.tot.dao"}) //Services and repositories to be scanned.
 @EnableTransactionManagement
-@PropertySource(value = {"classpath:hibernate.properties"})
+@PropertySource(value = {"classpath:mysql.properties"})
 public class HibernateConfig {
-
     @Autowired
     private Environment environment;
-
+    
     public HibernateConfig() {
-        System.out.println("HibernateConfig()>>>>>");
+        System.out.println("****************************************************");
+        System.out.println("****************************************************");
+        System.out.println("ApplicationContextConfig()");
     }
-
-    @Bean(name = "datasource")
-    public BasicDataSource getDataSource() {
+    
+    @Bean(name = "sessionFactory")
+    public LocalSessionFactoryBean getSessionFactory() {
+        LocalSessionFactoryBean sessionFactoryBean = new LocalSessionFactoryBean();
+        sessionFactoryBean.setDataSource(getDataSource());
+        //Entities to be scanned
+        sessionFactoryBean.setPackagesToScan(new String[] {"mx.com.tot.dto"});
+        sessionFactoryBean.setHibernateProperties(getHibernateProperties());
+        return sessionFactoryBean;
+    }
+    
+    @Bean(name = "dataSource")
+    public DataSource getDataSource() {
+        String user = environment.getProperty("jdbc.username");
+        String password = environment.getProperty("jdbc.password");
+        String driverClassName = environment.getProperty("jdbc.driver");
+        String url = environment.getProperty("jdbc.url");
+        System.out.println("url:" + url);
+        
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(environment.getProperty("jdbc.driver"));
-        dataSource.setUsername(environment.getProperty("jdbc.username"));
-        dataSource.setPassword(environment.getProperty("jdbc.password"));
-        dataSource.setUrl(environment.getProperty("jdbc.url"));
+        dataSource.setDriverClassName(driverClassName);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
 
         return dataSource;
     }
 
-    private Properties getProperties() {
-        Properties properties = new Properties();
-        properties.put("hibernate.dialect",environment.getProperty("hibernate.dialect"));
-
-        return properties;
-    }
-
-    @Bean(name = "sessionFactory")
-    public LocalSessionFactoryBean getSessionFactory() throws IOException {
-
-
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(getDataSource());
-        sessionFactory.setPackagesToScan(new String[] {"mx.com.tot.dto"});
-        sessionFactory.setHibernateProperties(getProperties());
-
-        return sessionFactory;
-    }
-
     @Bean
     @Autowired
-    public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
-        HibernateTransactionManager txMannager = new HibernateTransactionManager();
-        txMannager.setSessionFactory(sessionFactory);
+    public HibernateTransactionManager transactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager txManager = new HibernateTransactionManager();
+        txManager.setSessionFactory(sessionFactory);
 
-        return txMannager;
+        return txManager;
     }
 
-    /*
     @Bean
-    public HibernateExceptionTranslator hibernateExceptionTranslator(){
-        return new HibernateExceptionTranslator();
-    }
-    */
-
-    @Bean
-    public PersistenceExceptionTranslationPostProcessor getExceptionTranslator() {
+    public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
+    }
+
+    @Bean
+    public Properties getHibernateProperties() {
+        String dialect = environment.getProperty("hibernate.dialect");
+
+        Properties prop = new Properties();
+        prop.put("hibernate.dialect", dialect);
+        //prop.put("hibernate.current_session_context_class", "thread");
+        return prop;
     }
 }

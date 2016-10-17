@@ -5,6 +5,7 @@ import javax.persistence.*;
 /**
  * Created by elver on 1/08/16.
  */
+
 @Entity
 @Table(name = "Empleado")
 public class Empleado {
@@ -35,3 +36,4 @@ public class Empleado {
         return nombre + " [" + id + "]";
     }
 }
+
