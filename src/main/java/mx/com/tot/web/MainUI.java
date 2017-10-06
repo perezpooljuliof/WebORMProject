@@ -8,6 +8,7 @@ import com.vaadin.ui.UI;
 import mx.com.tot.config.SpringContextProvider;
 import mx.com.tot.dao.EmpleadoRepository;
 import mx.com.tot.dto.Empleado;
+import mx.com.tot.service.EmpleadoService;
 
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class MainUI extends UI {
         setContent(new Label("Hola"));
         Object bean = SpringContextProvider.getBean("firstBean");
         System.out.println("bean:" + bean);
-        EmpleadoRepository dao = SpringContextProvider.getApplicationContext().getBean(EmpleadoRepository.class);
-        List<Empleado> empleados = dao.getAll();
+        EmpleadoService service = SpringContextProvider.getApplicationContext().getBean(EmpleadoService.class);
+        List<Empleado> empleados = service.getAll();
         System.out.println(empleados);
     }
 }

@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  */
 
 @Configuration
-@ComponentScan({"mx.com.tot.dao"}) //Services and repositories to be scanned.
+@ComponentScan({"mx.com.tot.dao,mx.com.tot.service"}) //Services and repositories to be scanned.
 @EnableTransactionManagement
 @PropertySource(value = {"classpath:mysql.properties"})
 public class HibernateConfig {
@@ -29,9 +29,7 @@ public class HibernateConfig {
     private Environment environment;
     
     public HibernateConfig() {
-        System.out.println("****************************************************");
-        System.out.println("****************************************************");
-        System.out.println("ApplicationContextConfig()");
+        System.out.println("HibernateConfig()>>>>>>");
     }
     
     @Bean(name = "sessionFactory")
